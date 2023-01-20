@@ -5,7 +5,7 @@ metadata:
 
 components:
 
-  - name: tools
+  - name: tools2
     container:
       image: quay.io/devfile/universal-developer-image:ubi8-0e189d9
       memoryLimit: 3Gi
