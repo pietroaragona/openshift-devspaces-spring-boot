@@ -32,15 +32,15 @@ commands:
 
   - id: maven-build
     exec:
-      component: tools
+      component: tools2
       workingDir: ${PROJECT_SOURCE}
       commandLine: mvn clean install
       group:
         kind: build
         isDefault: true
-  - id: run-with-mysql
+  - id: maven-run
     exec:
-      component: tools
+      component: tools2
       workingDir: ${PROJECT_SOURCE}
       commandLine: |
         mvn spring-boot:run -DskipTests \
