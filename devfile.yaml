@@ -1,0 +1,50 @@
+schemaVersion: 2.1.0
+metadata:
+  name: openshift-devspaces-spring-boot-nohidden
+
+
+components:
+
+  - name: tools2
+    container:
+      image: quay.io/devfile/universal-developer-image:ubi8-0e189d9
+      memoryLimit: 3Gi
+      endpoints:
+        - exposure: none
+          name: debug
+          protocol: tcp
+          targetPort: 5005
+        - exposure: public
+          name: 8080-tcp
+          protocol: http
+          targetPort: 8080
+      volumeMounts:
+        - name: m2
+          path: /home/user/.m2
+
+  - name: m2
+    volume:
+      size: 1G
+
+
+
+commands:
+
+  - id: maven-build
+    exec:
+      component: tools2
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: mvn clean install
+      group:
+        kind: build
+        isDefault: true
+  - id: maven-run
+    exec:
+      component: tools2
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: |
+        mvn spring-boot:run -DskipTests \
+        -Dspring-boot.run.jvmArguments='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005,quiet=y'
+      group:
+        kind: run
+        isDefault: true
